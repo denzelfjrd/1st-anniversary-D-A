@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>For My Bby Ko 💕 Happy 1st Anniversary!</title>
+
+  <meta name="description" content="A special 1st Anniversary surprise dedicated to my favorite person.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap"
+    rel="stylesheet">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Sexy Pulsing Background & Canvas for Hearts + Dinosaurs 🦖 🦕 -->
+  <div class="sexy-pulsing-bg"></div>
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Floating Audio Player Widget (5 Cycling Upbeat & Joyful Tracks) -->
+  <div class="music-player-widget" id="musicPlayerWidget">
+    <button id="btnMusicToggle" class="music-btn" title="Toggle Music" aria-label="Toggle Background Music">
+      <span class="music-icon" id="musicIcon">🎵</span>
+    </button>
+    <div class="music-info">
+      <span class="track-title" id="trackTitle">Upbeat Sunshine ☀️ (1/5)</span>
+      <span class="track-status" id="trackStatus">Playing 💕</span>
+    </div>
+    <button id="btnMusicNext" class="music-next-btn" title="Next Song" aria-label="Play Next Background Track">⏭️</button>
+  </div>
+  <audio id="bgAudio" preload="auto" autoplay></audio>
+
+  <!-- App Wrapper (Single-App Experience) -->
+  <main class="app-container">
+
+    <!-- PAGE 1: Anniversary Password Landing Screen -->
+    <section id="page-intro" class="app-page active">
+      <div class="glass-card hero-card">
+        <div class="heart-badge">💖 1ST ANNIVERSARY SPECIAL 💖</div>
+        <h1 class="hero-title">Unlock My Heart 🔒💖</h1>
+        <p class="hero-subtitle">Hello Bby ko, Here's a little world full of our memories, love notes, and surprises just for you. Enter our anniversary date below to proceed! 😘</p>
+
+        <div class="password-box-container">
+          <p class="hint-text">Hint: The date our beautiful journey began! 🗓️<br><span>(Example: 10/11 or October 11)</span></p>
+
+          <form id="passwordForm" onsubmit="return false;" class="pass-form-hero">
+            <input type="text" id="passInput" autocomplete="off" placeholder="Enter anniversary date..." aria-label="Anniversary Password Input" autofocus>
+            <button type="submit" id="btnUnlockPass" class="btn btn-primary">Unlock 🔑</button>
+          </form>
+          <p id="passErrorMsg" class="error-msg hidden" role="alert">Oopsie! Try again bby (Hint: 10/11) 🥺</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 2: Anniversary Letter Screen -->
+    <section id="page-letter" class="app-page hidden">
+      <div class="page-top-bar">
+        <span class="step-tag">STAGE 1 OF 3 • FROM MY HEART</span>
+        <h2>A Letter to My Favorite Person</h2>
+        <p>Unroll our scroll and listen to a special voice note from me 💌</p>
+      </div>
+
+      <!-- Voice Message Card -->
+      <div class="voice-message-card" id="voiceMessageCard">
+        <div class="voice-card-header">
+          <span class="voice-icon">🎙️</span>
+          <div class="voice-title-group">
+            <h3 class="voice-title">Personal Voice Message</h3>
+            <p class="voice-subtitle">Tap below to hear my voice message for you</p>
+          </div>
+        </div>
+
+        <div class="voice-controls-row">
+          <button id="btnVoiceToggle" class="btn btn-voice" aria-label="Play personal voice message" title="Play personal voice message">
+            <span id="voicePlayIcon" class="voice-btn-icon">▶</span>
+            <span id="voicePlayLabel">Play Voice Message</span>
+          </button>
+          <span id="voiceStatusMsg" class="voice-status-badge">Audio: Ready 🎙️</span>
+        </div>
+
+        <audio id="letterVoiceAudio" preload="metadata" src="assets/audio/anniversary-voice.mp3"></audio>
+
+        <div id="voiceMsgInfoNote" class="voice-info-box hidden" role="region" aria-live="polite">
+          <span>💡 <strong>Voice Note Info:</strong> Place your MP3 file at <code>assets/audio/anniversary-voice.mp3</code> to play custom voice audio!</span>
+        </div>
+      </div>
+
+      <div class="letter-container">
+        <!-- Vintage Parchment Scroll Container -->
+        <div class="parchment-scroll">
+          <div class="scroll-top-roller">
+            <span class="wax-seal">🕯️</span>
+          </div>
+
+          <div class="scroll-content">
+            <h2 class="scroll-title">To My Dearest Bby Ko</h2>
+            <p class="scroll-subtitle">Tap below to unroll and read...</p>
+
+            <button class="btn btn-primary" id="openLetterBtn">Open & Read Letter ✨</button>
+
+            <div class="letter-paper hidden" id="letterPaper">
+              <p id="typedLetterText" class="handwritten-text"></p>
+              <span class="blinking-cursor" id="letterCursor">|</span>
+            </div>
+          </div>
+
+          <div class="scroll-bottom-roller"></div>
+        </div>
+      </div>
+
+      <div class="page-action-footer">
+        <button id="btnToTimeline" class="btn btn-secondary">Continue to Timeline 📸 ›</button>
+      </div>
+    </section>
+
+    <!-- PAGE 3: Timeline Screen -->
+    <section id="page-timeline" class="app-page hidden">
+      <div class="page-top-bar">
+        <span class="step-tag">STAGE 2 OF 3 • OUR STORY</span>
+        <h2>Our 1-Year Journey</h2>
+        <p>Swipe, drag, or tap the months below. Tap any polaroid photo to reveal our memory details! 📸</p>
+      </div>
+
+      <!-- Draggable Month Nav Bar -->
+      <div class="month-nav-wrapper">
+        <button class="nav-arrow left" id="scrollLeft" aria-label="Scroll months left">‹</button>
+        <div class="month-nav-container" id="monthNav">
+          <!-- Month pills injected via JS -->
+        </div>
+        <button class="nav-arrow right" id="scrollRight" aria-label="Scroll months right">›</button>
+      </div>
+
+      <!-- Polaroid Cards Grid Display -->
+      <div class="polaroid-grid" id="timelineDisplay">
+        <!-- Rendered dynamically as polaroid cards -->
+      </div>
+
+      <div class="page-action-footer">
+        <button id="btnBackToLetter" class="btn btn-outline">‹ Back to Letter</button>
+        <button id="btnToExtras" class="btn btn-secondary">Next: Little Surprises 🎁 ›</button>
+      </div>
+    </section>
+
+    <!-- POLAROID PHOTO/VIDEO DETAIL MODAL -->
+    <div id="photoModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-label="Memory Photo Detail">
+      <div class="glass-card polaroid-detail-card">
+        <button class="modal-close-btn" id="closePhotoModal" aria-label="Close memory detail">✕</button>
+        <div class="detail-polaroid-frame">
+          <div id="detailMediaWrapper" class="polaroid-media-wrapper">
+            <img id="detailPhotoImg" src="" alt="Memory Media">
+          </div>
+          <div class="polaroid-caption-area">
+            <span class="detail-photo-date" id="detailPhotoDate"></span>
+            <h3 class="detail-photo-title" id="detailPhotoTitle"
+              style="display:none; margin: 4px 0; font-size: 1.15rem; color: #2b0b1e;"></h3>
+            <p class="detail-photo-desc" id="detailPhotoDesc"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 4: Extra Features Screen -->
+    <section id="page-extras" class="app-page hidden">
+      <div class="page-top-bar">
+        <span class="step-tag">STAGE 3 OF 3 • SURPRISES & MEMORIES</span>
+        <h2>Just For Bby Ko</h2>
+        <p>Interactive games, love jar notes, and sweet treats made for you!</p>
+      </div>
+
+      <div class="extras-grid">
+        <!-- Feature 1: Relationship Quiz -->
+        <div class="extra-card glass-card quiz-card" id="quizCard">
+          <div class="card-icon">🧩</div>
+          <h3>Relationship Quiz</h3>
+          <p>How well do you know our favorite memories and inside jokes?</p>
+
+          <div class="quiz-container" id="quizContainer">
+            <div class="quiz-meta-bar">
+              <span class="quiz-progress-badge" id="quizProgressTag">Question 1 of 4</span>
+              <span class="quiz-score-badge" id="quizScoreTag">Score: 0</span>
+            </div>
+
+            <div class="quiz-question-box">
+              <h4 class="quiz-question-title" id="quizQuestionText">Question text</h4>
+              <div class="quiz-options-list" id="quizOptionsGrid">
+                <!-- Option buttons injected via JS -->
+              </div>
+            </div>
+
+            <div class="quiz-feedback-box hidden" id="quizFeedbackBox" role="alert">
+              <p class="quiz-feedback-msg" id="quizFeedbackText"></p>
+              <button id="btnNextQuestion" class="btn btn-primary btn-small">Next Question ›</button>
+            </div>
+
+            <div class="quiz-results-box hidden" id="quizResultsBox">
+              <div class="quiz-trophy-icon">🏆💖</div>
+              <h4 id="quizResultsTitle" class="quiz-results-title">Quiz Finished!</h4>
+              <p id="quizResultsMsg" class="quiz-results-msg">Score: 4/4</p>
+              <button id="btnRestartQuiz" class="btn btn-secondary btn-small">Play Again 🔄</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 2: Reasons I Love You Jar -->
+        <div class="extra-card glass-card love-jar-card" id="loveJarCard">
+          <div class="card-icon">🫙</div>
+          <h3>“Reasons I Love You” Jar</h3>
+          <p>Tap the jar or button below to pull out a sweet love note!</p>
+
+          <div class="jar-visual-container">
+            <div id="loveJarVisual" class="love-jar-svg-box" tabindex="0" role="button" aria-label="Tap to draw a reason I love you note from the jar" title="Tap to draw a note!">
+              <svg class="jar-svg" viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- Jar Lid -->
+                <rect x="35" y="10" width="90" height="18" rx="5" fill="#ffd166" stroke="#e0aaff" stroke-width="2"/>
+                <rect x="42" y="28" width="76" height="8" fill="#ffccd5" opacity="0.8"/>
+                <!-- Jar Body -->
+                <path d="M 30 36 C 20 50, 15 70, 15 120 C 15 170, 30 185, 80 185 C 130 185, 145 170, 145 120 C 145 70, 140 50, 130 36 Z" 
+                      fill="rgba(255, 255, 255, 0.15)" stroke="rgba(255, 180, 200, 0.6)" stroke-width="4"/>
+                <path d="M 25 50 C 22 70, 22 130, 27 160" fill="none" stroke="rgba(255, 255, 255, 0.4)" stroke-width="3" stroke-linecap="round"/>
+                <!-- Floating Hearts -->
+                <text x="50" y="85" font-size="22" class="jar-heart h1">💖</text>
+                <text x="90" y="105" font-size="18" class="jar-heart h2">💕</text>
+                <text x="60" y="140" font-size="24" class="jar-heart h3">❤️</text>
+                <text x="100" y="155" font-size="20" class="jar-heart h4">🌸</text>
+                <text x="40" y="170" font-size="16" class="jar-heart h5">✨</text>
+              </svg>
+            </div>
+          </div>
+
+          <button id="btnDrawJarNote" class="btn btn-primary btn-small">Tap Jar to Draw a Note 📜</button>
+
+          <div id="jarNoteDisplayBox" class="jar-note-box hidden" role="region" aria-live="polite">
+            <div class="note-paper-card">
+              <span class="note-ribbon-tag">🎀 Reason #<span id="jarNoteNumber">1</span></span>
+              <p id="jarNoteText" class="jar-note-content">Note text</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 3: Mood Selector -->
+        <div class="extra-card glass-card" id="moodCard">
+          <div class="card-icon">💬</div>
+          <h3>How are you feeling right now, bby?</h3>
+          <p>Pick your current mood to read a special message from me:</p>
+
+          <div class="category-buttons" id="moodButtons">
+            <button class="btn-mood" data-mood="sad">Sad 🥺</button>
+            <button class="btn-mood" data-mood="mad">Mad 😤</button>
+            <button class="btn-mood" data-mood="happy">Happy 😊</button>
+            <button class="btn-mood" data-mood="bored">Bored 🥱</button>
+            <button class="btn-mood" data-mood="heavy">Heavy Mood 🫂</button>
+          </div>
+
+          <div class="message-display-box hidden" id="moodMessageBox">
+            <div class="message-tag" id="moodTag">Mood Message</div>
+            <p class="message-text" id="moodText"></p>
+            <button class="btn-small" id="anotherMessageBtn">Get Another Message 🎲</button>
+          </div>
+        </div>
+
+        <!-- Feature 4: Memory Drawer -->
+        <div class="extra-card glass-card" id="memoryDrawerCard">
+          <div class="card-icon">📸</div>
+          <h3>Random Memory Drawer</h3>
+          <p>Pick a category to pull out a surprise memory photo:</p>
+
+          <div class="category-buttons" id="photoCategoryButtons">
+            <button class="btn-photo" data-category="firstMeet">First Meet 🤝</button>
+            <button class="btn-photo" data-category="secondMeet">Second Meet 🍿</button>
+            <button class="btn-photo" data-category="firstTimes">First Times 🌟</button>
+            <button class="btn-photo" data-category="favoriteRandom">Favorite Moments 💖</button>
+          </div>
+
+          <div class="photo-display-box hidden" id="photoDisplayBox">
+            <div class="memory-polaroid" id="randomMemoryPolaroid" title="Tap to view full screen 📸" tabindex="0" role="button" aria-label="View random memory photo full screen">
+              <div id="randomMediaWrapper" class="polaroid-media-wrapper">
+                <img id="randomPhotoImg" src="" alt="Memory Media">
+              </div>
+              <div class="memory-info">
+                <span class="memory-date" id="randomPhotoDate"></span>
+                <h4 id="randomPhotoTitle"></h4>
+                <p id="randomPhotoCaption"></p>
+                <span class="polaroid-click-hint">Tap photo/video to open 🔍</span>
+              </div>
+            </div>
+            <button class="btn-small" id="anotherPhotoBtn">Pick Another Photo 🎲</button>
+          </div>
+        </div>
+
+        <!-- Feature 5: Adults-Only 18+ Password Gate -->
+        <div class="extra-card glass-card adults-only-card" id="adultsOnlyCard">
+          <div class="card-badge-18">🔥 18+ CONSENTING ADULTS ONLY</div>
+          <div class="card-icon">🔒😈</div>
+          <h3>Private Adults Vault</h3>
+
+          <!-- Gate Prompt Form -->
+          <div id="adultGateFormWrapper" class="adult-gate-form-wrapper">
+            <p class="gate-prompt-text">What’s our favourite or usual position?</p>
+
+            <form id="adultPasswordForm" onsubmit="return false;" class="adult-pass-form">
+              <input type="text" id="adultPassInput" autocomplete="off" placeholder="Enter position..." aria-label="What is our favourite or usual position?">
+              <button type="submit" id="btnUnlockAdultPass" class="btn btn-primary btn-small">Unlock Vault 🔑</button>
+            </form>
+            <p id="adultPassErrorMsg" class="error-msg hidden" role="alert">Incorrect answer, bby! Try again 🥺</p>
+            <p class="adult-privacy-disclaimer">
+              🔒 <em>Privacy Note: For adults 18+.</em>
+            </p>
+          </div>
+
+          <!-- Unlocked Content Vault -->
+          <div id="adultContentVault" class="adult-content-vault hidden">
+            <div class="vault-unlocked-header">
+              <span class="vault-status-badge">🔓 Vault Unlocked</span>
+              <h4>Our Spicy Corner 🔥</h4>
+            </div>
+
+            <!-- Spicy Mood Buttons -->
+            <div class="spicy-mood-section">
+              <p class="spicy-section-title">Spicy Mood Messages:</p>
+              <div class="category-buttons" id="spicyMoodButtons">
+                <button class="btn-mood btn-spicy" data-mood="horny">Horny 😈</button>
+                <button class="btn-mood btn-spicy" data-mood="wild">Wild & Spicy 🌶️</button>
+                <button class="btn-mood btn-spicy" data-mood="cuddles">Late Night Cuddles 🛌</button>
+              </div>
+
+              <div class="message-display-box hidden" id="spicyMoodMessageBox">
+                <div class="message-tag" id="spicyMoodTag">Spicy Message</div>
+                <p class="message-text" id="spicyMoodText"></p>
+                <button class="btn-small" id="anotherSpicyMessageBtn">Get Another Spicy Message 🎲</button>
+              </div>
+            </div>
+
+            <!-- Spicy Romantic Coupons -->
+            <div class="spicy-coupons-section">
+              <p class="spicy-section-title">Spicy Coupons (Tap to Redeem):</p>
+              <div class="coupons-grid">
+                <div class="coupon-card" tabindex="0" role="button" aria-label="Redeem Massage Coupon">
+                  <span class="coupon-icon">💆‍♀️</span>
+                  <h5>Full Body Massage 😉😘</h5>
+                  <p>Redeemable anytime on demand!</p>
+                </div>
+                <div class="coupon-card" tabindex="0" role="button" aria-label="Redeem Late Night Date Coupon">
+                  <span class="coupon-icon">🤤</span>
+                  <h5>Sex 👉🏻👌🏻🥵</h5>
+                  <p>Warm, Cozy, and Pleasurable Cuddles & Snuggles</p>
+                </div>
+                <div class="coupon-card" tabindex="0" role="button" aria-label="Redeem Unlimited Kisses Coupon">
+                  <span class="coupon-icon">💋</span>
+                  <h5>Unlimited Kiss Pass</h5>
+                  <p>Valid for infinite hugs & kisses</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="page-action-footer">
+        <button id="btnBackToTimeline" class="btn btn-outline">‹ Back to Timeline</button>
+        <button id="btnRestartApp" class="btn btn-primary">Start Over ❤️</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Floating Step Dots (Navigation) -->
+  <nav class="chic-step-dots hidden" id="appStepNav" aria-label="App Sequence Navigation">
+    <button class="step-dot active" data-page="page-letter" title="Letter 💌" aria-label="Go to Anniversary Letter"></button>
+    <button class="step-dot" data-page="page-timeline" title="Timeline 📸" aria-label="Go to Photo & Video Timeline"></button>
+    <button class="step-dot" data-page="page-extras" title="Surprises 🎁" aria-label="Go to Surprises & Games"></button>
+  </nav>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
